@@ -1,0 +1,12 @@
+FROM openjdk:17-jdk-slim
+
+WORKDIR /app
+
+# 复制预先构建好的jar包
+COPY ./dubbotesthub-server-*.jar dubbotesthub-server.jar
+
+# 暴露端口
+EXPOSE 8080 20880
+
+# 使用shell形式的ENTRYPOINT，这样可以展开环境变量
+ENTRYPOINT java $JAVA_OPTS -jar dubbotesthub-server.jar 

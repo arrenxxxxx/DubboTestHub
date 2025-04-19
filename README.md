@@ -1,141 +1,117 @@
-# DubboTestHub | Dubbo Testing Hub
+# DubboTestHub
 
-A simple Dubbo demonstration project specifically designed for testing and debugging various Dubbo-related features. Built with Spring Cloud and Dubbo framework, using Zookeeper as the registry center, with various types of service interfaces and parameter passing examples already added.
+A microservice testing framework based on Spring Boot and Apache Dubbo
 
-[English](#project-purpose) | [中文](./README_zh.md)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![English](https://img.shields.io/badge/Language-English-blue)](README.md)
+[![中文简体](https://img.shields.io/badge/Language-简体中文-red)](README_zh.md)
 
-## Project Purpose
+🚀 DubboTestHub — A powerful testing framework for Apache Dubbo microservices!
 
-This project can be used to debug the following Dubbo-related features:
-- Connection and service discovery with different registry centers (such as Zookeeper, Nacos, Eureka, etc.)
-- Behavior and performance testing of MCP Dubbo plugins
-- Integration testing of Dify plugins
-- Monitoring and governance of Dubbo services
-- Tracing and analysis of service calls
-- Serialization and transmission of various parameter types
-- Validation of load balancing strategies
-- Service degradation and circuit breaking testing
+## 🏗️ Project Structure
 
-## Project Structure
+- `dubbotesthub-api`: Contains Dubbo service interfaces and related model classes
+- `dubbotesthub-provider`: Dubbo service provider implementation
+- `dubbotesthub-consumer`: Dubbo service consumer and HTTP interfaces
+- `dubbotesthub-starter`: 
+  - `dubbotesthub-provider-starter`: Service provider starter, depends on provider module and provides auto-configuration
+  - `dubbotesthub-consumer-starter`: Service consumer starter, depends on consumer module and provides auto-configuration
+- `dubbotesthub-server`: Server that integrates service provider and consumer, references both starter modules
 
-- `dubbo-api`: Contains service interface definitions and data model classes
-- `dubbo-provider`: Service provider, implementing various types of service methods
-- `dubbo-consumer`: Service consumer, exposing service calls through REST API
+## 🛠️ Technology Stack
 
-## Docker Environment
+- JDK 17
+- Spring Boot 3.2.0
+- Apache Dubbo 3.2.10
+- Gradle
 
-The project includes a complete Docker Compose configuration that can start the following services:
-- Zookeeper: Dubbo service registration and discovery
-- MySQL: Data storage (expandable use)
-- Redis: Cache service (expandable use)
-- MinIO: Object storage service (expandable use)
-- Eureka: Service registry center (can be used as an alternative registry center)
+## 🔄 Registry Center
 
-## How to Run
-
-### 1. Start Required Services
-
-Start Zookeeper only:
-```bash
-docker-compose up -d zookeeper
-```
-
-Or start all services:
-```bash
-docker-compose up -d
-```
-
-### 2. Compile the Project
-
-```bash
-mvn clean package
-```
-
-### 3. Start the Service Provider
-
-```bash
-java -jar dubbo-provider/target/dubbo-provider-1.0-SNAPSHOT.jar
-```
-
-### 4. Start the Service Consumer
-
-```bash
-java -jar dubbo-consumer/target/dubbo-consumer-1.0-SNAPSHOT.jar
-```
-
-### 5. Test the Service
-
-The service consumer provides API interfaces with various parameter types for testing different parameter scenarios in Dubbo:
-
-#### String Parameter
-- Access: http://localhost:8082/api/hello/world
-
-#### No-parameter Method
-- Access: http://localhost:8082/api/hello
-
-#### Object Parameter
-- Use POST request: http://localhost:8082/api/user
-- Request body example:
-```json
-{
-  "id": 1,
-  "name": "John",
-  "age": 25
-}
-```
-
-#### Array Parameter
-- Access: http://localhost:8082/api/users?names=John,Mike,Sarah
-
-#### Map Parameter
-- Access: http://localhost:8082/api/user/map?id=1&name=John
-
-#### Combination Parameters
-- Access: http://localhost:8082/api/users/search?keyword=employee&page=1&size=5
-
-#### List<User> Object List Parameter
-- Use POST request: http://localhost:8082/api/users/batch
-- Request body example:
-```json
-[
-  {"id": 1, "name": "John", "age": 25},
-  {"id": 2, "name": "Mike", "age": 30},
-  {"id": 3, "name": "Sarah", "age": 35}
-]
-```
-
-## Extended Testing
-
-### Switching Registry Centers
-You can switch different registry centers by modifying the `application.yml` configuration file:
+This project supports using either Zookeeper or Nacos as registry center, which can be switched by modifying `dubbo.registry.address` in the configuration file:
 
 ```yaml
 dubbo:
   registry:
-    address: zookeeper://localhost:2181
-    # Or other registry centers
-    # address: nacos://localhost:8848
-    # address: eureka://localhost:8761
+    # Zookeeper configuration
+    # address: zookeeper://127.0.0.1:2181
+    
+    # Nacos configuration
+    address: nacos://127.0.0.1:8848
 ```
 
-### Testing MCP Dubbo Plugin
-You can integrate the MCP Dubbo plugin to test its functionality and performance:
+## 🌐 Service Interfaces
 
-1. Add MCP Dubbo dependency
-2. Configure MCP connection parameters
-3. Verify MCP functionality through API interfaces
+The `HelloFacade` interface provides examples of service calls with various parameter types:
 
-### Testing Dify Plugin
-You can test the API call process by integrating the Dify plugin:
+- No parameter call
+- String parameter call
+- Object parameter call
+- List parameter call
+- Map parameter call
 
-1. Add Dify plugin dependency
-2. Add Dify related configuration in the service
-3. Verify the integration effect of the Dify plugin
+## 📦 Module Dependencies
 
-## Technology Stack
+The project is designed with a starter pattern:
+- provider and consumer modules contain the actual business logic implementation
+- provider-starter and consumer-starter modules depend on the corresponding implementation modules, providing auto-configuration and dependency management
+- server module realizes integrated startup and deployment by referencing both starter modules
 
-- Spring Boot 2.6.11
-- Spring Cloud 2021.0.4
-- Apache Dubbo 3.1.6
-- Zookeeper 3.7
-- Other optional components: MySQL 8.0, Redis, MinIO 
+## 📂 Package Structure
+
+The package structure is uniformly `io.arrenxxxxx.dubbotesthub`, with each module using corresponding sub-package names.
+
+## 🚀 Build and Run
+
+### Build Project
+
+```bash
+gradle clean build
+```
+
+### Start Method
+
+Start with the integrated Server:
+
+```bash
+java -jar dubbotesthub-server/build/libs/dubbotesthub-server-0.0.1-SNAPSHOT.jar
+```
+
+## 🐳 Docker Deployment
+
+The project provides Docker deployment capability for quick setup:
+
+### Quick Start
+
+```bash
+cd docker
+docker-compose up -d
+```
+
+This command will launch:
+- Zookeeper for service registry
+- Nacos for service discovery (optional)
+- DubboTestHub server application
+
+### Access Service
+
+After startup, you can access the service at `http://localhost:8080`
+
+See `docker/README.md` for more detailed Docker deployment information.
+
+## 🧪 HTTP API Testing
+
+The Consumer exposes RESTful APIs that can be tested through the following endpoints:
+
+- GET `/hello`: No parameter call
+- GET `/hello/{name}`: String parameter call
+- POST `/hello/object`: Object parameter call
+- POST `/hello/list`: List parameter call
+- POST `/hello/map`: Map parameter call
+
+## 🤝 Contributing
+
+Contributions, issues, and feature requests are welcome!
+
+## 📄 License
+
+MIT 

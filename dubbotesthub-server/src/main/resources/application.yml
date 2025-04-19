@@ -1,0 +1,22 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: dubbotesthub-server
+
+dubbo:
+  application:
+    name: ${spring.application.name}
+  protocol:
+    name: dubbo
+    port: 20880
+  registry:
+    # zookeeper or nacos
+    address: zookeeper://zookeeper:2181
+#    address: nacos://nacos:8848
+  scan:
+    base-packages: io.arrenxxxxx.dubbotesthub.provider
+  consumer:
+    timeout: 5000
+    check: false 

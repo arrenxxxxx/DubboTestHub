@@ -1,0 +1,22 @@
+apply plugin: 'java-library'
+apply plugin: 'org.springframework.boot'
+
+dependencies {
+    api project(':dubbotesthub-api')
+    api project(':dubbotesthub-provider')
+    
+    api 'org.springframework.boot:spring-boot-starter'
+    api 'org.springframework.boot:spring-boot-autoconfigure'
+    api 'org.apache.dubbo:dubbo'
+    api 'org.apache.dubbo:dubbo-spring-boot-starter'
+    
+    // Zookeeper
+    api 'org.apache.dubbo:dubbo-registry-zookeeper'
+    api 'org.apache.zookeeper:zookeeper'
+    api 'org.apache.curator:curator-framework'
+    api 'org.apache.curator:curator-recipes'
+    
+    // Nacos
+    api 'org.apache.dubbo:dubbo-registry-nacos'
+    api 'com.alibaba.nacos:nacos-client'
+} 

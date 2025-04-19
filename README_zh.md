@@ -1,139 +1,117 @@
-# DubboTestHub | Dubbo测试中心
+# DubboTestHub
 
-这是一个简单的Dubbo演示项目，专门用于测试和调试与Dubbo相关的各种功能。项目使用Spring Cloud和Dubbo框架，通过Zookeeper作为注册中心，并已添加多种类型的服务接口和参数传递示例。
+基于Spring Boot和Apache Dubbo的微服务测试工程
 
-## 项目用途
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![English](https://img.shields.io/badge/Language-English-blue)](README.md)
+[![中文简体](https://img.shields.io/badge/Language-简体中文-red)](README_zh.md)
 
-这个项目可以用来调试以下Dubbo相关功能：
-- 不同注册中心的连接和服务发现（如Zookeeper、Nacos、Eureka等）
-- MCP Dubbo插件的行为和性能测试
-- Dify插件的集成测试
-- Dubbo服务的监控和治理
-- 服务调用的追踪和分析
-- 各种类型参数的序列化和传输
-- 负载均衡策略的验证
-- 服务降级和熔断测试
+🚀 DubboTestHub — 让Apache Dubbo微服务测试变得简单高效！
 
-## 项目结构
+## 🏗️ 项目结构
 
-- `dubbo-api`: 包含服务接口定义和数据模型类
-- `dubbo-provider`: 服务提供者，实现各种类型的服务方法
-- `dubbo-consumer`: 服务消费者，通过REST API暴露服务调用
+- `dubbotesthub-api`: 包含Dubbo服务接口和相关模型类
+- `dubbotesthub-provider`: Dubbo服务提供者实现
+- `dubbotesthub-consumer`: Dubbo服务消费者和HTTP接口
+- `dubbotesthub-starter`: 
+  - `dubbotesthub-provider-starter`: 服务提供者starter，依赖provider模块并提供自动配置
+  - `dubbotesthub-consumer-starter`: 服务消费者starter，依赖consumer模块并提供自动配置
+- `dubbotesthub-server`: 整合服务提供者和消费者的服务器，引用两个starter模块
 
-## Docker环境
+## 🛠️ 技术栈
 
-项目包含完整的Docker Compose配置，可以启动以下服务：
-- Zookeeper: Dubbo服务注册与发现
-- MySQL: 数据存储（可扩展使用）
-- Redis: 缓存服务（可扩展使用）
-- MinIO: 对象存储服务（可扩展使用）
-- Eureka: 服务注册中心（可作为备选注册中心）
+- JDK 17
+- Spring Boot 3.2.0
+- Apache Dubbo 3.2.10
+- Gradle
 
-## 如何运行
+## 🔄 注册中心
 
-### 1. 启动所需服务
-
-仅启动Zookeeper：
-```bash
-docker-compose up -d zookeeper
-```
-
-或启动所有服务：
-```bash
-docker-compose up -d
-```
-
-### 2. 编译项目
-
-```bash
-mvn clean package
-```
-
-### 3. 启动服务提供者
-
-```bash
-java -jar dubbo-provider/target/dubbo-provider-1.0-SNAPSHOT.jar
-```
-
-### 4. 启动服务消费者
-
-```bash
-java -jar dubbo-consumer/target/dubbo-consumer-1.0-SNAPSHOT.jar
-```
-
-### 5. 测试服务
-
-服务消费者提供了多种参数类型的API接口，可用于测试Dubbo的各种传参场景：
-
-#### 字符串参数
-- 访问: http://localhost:8082/api/hello/world
-
-#### 无参方法
-- 访问: http://localhost:8082/api/hello
-
-#### 对象参数
-- 使用POST请求: http://localhost:8082/api/user
-- 请求体示例:
-```json
-{
-  "id": 1,
-  "name": "张三",
-  "age": 25
-}
-```
-
-#### 数组参数
-- 访问: http://localhost:8082/api/users?names=张三,李四,王五
-
-#### Map参数
-- 访问: http://localhost:8082/api/user/map?id=1&name=张三
-
-#### 组合参数
-- 访问: http://localhost:8082/api/users/search?keyword=职员&page=1&size=5
-
-#### List<User>对象列表参数
-- 使用POST请求: http://localhost:8082/api/users/batch
-- 请求体示例:
-```json
-[
-  {"id": 1, "name": "张三", "age": 25},
-  {"id": 2, "name": "李四", "age": 30},
-  {"id": 3, "name": "王五", "age": 35}
-]
-```
-
-## 扩展测试
-
-### 切换注册中心
-可以通过修改`application.yml`配置文件来切换不同的注册中心：
+本项目支持同时使用Zookeeper或Nacos作为注册中心，通过修改配置文件中的`dubbo.registry.address`即可切换：
 
 ```yaml
 dubbo:
   registry:
-    address: zookeeper://localhost:2181
-    # 或其他注册中心
-    # address: nacos://localhost:8848
-    # address: eureka://localhost:8761
+    # Zookeeper配置
+    # address: zookeeper://127.0.0.1:2181
+    
+    # Nacos配置
+    address: nacos://127.0.0.1:8848
 ```
 
-### 测试MCP Dubbo插件
-可以在项目中集成MCP Dubbo插件来测试其功能和性能：
+## 🌐 服务接口
 
-1. 添加MCP Dubbo依赖
-2. 配置MCP连接参数
-3. 通过API接口验证MCP功能
+`HelloFacade`接口提供了多种参数类型的服务调用示例：
 
-### 测试Dify插件
-可以通过集成Dify插件来测试API调用流程：
+- 无参数调用
+- 字符串参数调用
+- 对象参数调用
+- List参数调用
+- Map参数调用
 
-1. 添加Dify插件依赖
-2. 在服务中添加Dify相关配置
-3. 验证Dify插件的集成效果
+## 📦 模块依赖
 
-## 技术栈
+项目采用了starter模式进行设计：
+- provider和consumer模块包含实际的业务逻辑实现
+- provider-starter和consumer-starter模块依赖对应的实现模块，提供自动配置和依赖管理
+- server模块通过引用两个starter模块，实现一体化启动和部署
 
-- Spring Boot 2.6.11
-- Spring Cloud 2021.0.4
-- Apache Dubbo 3.1.6
-- Zookeeper 3.7
-- 其他可选组件：MySQL 8.0, Redis, MinIO 
+## 📂 包结构
+
+项目的包结构统一为`io.arrenxxxxx.dubbotesthub`，各模块使用对应的子包名。
+
+## 🚀 构建与运行
+
+### 构建项目
+
+```bash
+gradle clean build
+```
+
+### 启动方式
+
+使用Server一体化启动：
+
+```bash
+java -jar dubbotesthub-server/build/libs/dubbotesthub-server-0.0.1-SNAPSHOT.jar
+```
+
+## 🐳 Docker部署
+
+本项目提供了Docker部署能力，可以快速搭建完整环境：
+
+### 快速开始
+
+```bash
+cd docker
+docker-compose up -d
+```
+
+该命令将启动以下服务：
+- Zookeeper作为服务注册中心
+- Nacos作为服务发现中心（可选）
+- DubboTestHub服务应用
+
+### 访问服务
+
+启动完成后，可以通过`http://localhost:8080`访问服务
+
+查看`docker/README.md`获取更详细的Docker部署信息。
+
+## 🧪 HTTP接口测试
+
+Consumer暴露了RESTful API，可以通过以下端点进行测试：
+
+- GET `/hello`: 无参调用
+- GET `/hello/{name}`: 字符串参数调用
+- POST `/hello/object`: 对象参数调用
+- POST `/hello/list`: List参数调用
+- POST `/hello/map`: Map参数调用
+
+## 🤝 贡献
+
+欢迎提交贡献、问题和功能请求！
+
+## 📄 License
+
+MIT 

@@ -1,0 +1,38 @@
+apply plugin: 'org.springframework.boot'
+
+bootJar {
+    enabled = true
+}
+
+springBoot {
+    buildInfo()
+}
+
+bootJar {
+    manifest {
+        attributes(
+            'Add-Opens': 'java.base/java.math java.base/java.lang java.base/java.util java.base/java.util.concurrent java.base/java.net'
+        )
+    }
+}
+
+dependencies {
+    implementation project(':dubbotesthub-api')
+    implementation project(':dubbotesthub-starter:dubbotesthub-provider-starter')
+    implementation project(':dubbotesthub-starter:dubbotesthub-consumer-starter')
+    
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.apache.dubbo:dubbo'
+    implementation 'org.apache.dubbo:dubbo-spring-boot-starter'
+    
+    // Zookeeper
+    implementation 'org.apache.dubbo:dubbo-registry-zookeeper'
+    implementation 'org.apache.zookeeper:zookeeper'
+    implementation 'org.apache.curator:curator-framework'
+    implementation 'org.apache.curator:curator-recipes'
+    
+    // Nacos
+    implementation 'org.apache.dubbo:dubbo-registry-nacos'
+    implementation 'com.alibaba.nacos:nacos-client'
+} 

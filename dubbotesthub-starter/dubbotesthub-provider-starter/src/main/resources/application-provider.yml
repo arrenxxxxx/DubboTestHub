@@ -1,0 +1,8 @@
+dubbo:
+  application:
+    name: dubbotesthub-provider
+  protocol:
+    name: dubbo
+    port: 20880
+  scan:
+    base-packages: io.arrenxxxxx.dubbotesthub.provider

@@ -1,0 +1,8 @@
+rootProject.name = 'DubboTestHub'
+
+include 'dubbotesthub-api'
+include 'dubbotesthub-provider'
+include 'dubbotesthub-consumer'
+include 'dubbotesthub-server'
+include 'dubbotesthub-starter:dubbotesthub-provider-starter'
+include 'dubbotesthub-starter:dubbotesthub-consumer-starter' 

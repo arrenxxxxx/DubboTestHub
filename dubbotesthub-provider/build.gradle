@@ -1,0 +1,7 @@
+dependencies {
+    implementation project(':dubbotesthub-api')
+    
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.apache.dubbo:dubbo'
+    implementation 'org.apache.dubbo:dubbo-spring-boot-starter'
+} 

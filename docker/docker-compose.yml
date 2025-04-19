@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+  # zk
+  zookeeper:
+    image: zookeeper:3.7
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=zookeeper:2888:3888;2181
+    volumes:
+      - ./zk-data:/data
+      - ./zk-datalog:/datalog
+    networks:
+      - default-network
+    profiles:
+      - default
+      - with-zk
+  
+  # nacos
+  nacos:
+    image: nacos/nacos-server:v2.2.3
+    container_name: nacos
+    environment:
+      - PREFER_HOST_MODE=hostname
+      - MODE=standalone
+      - NACOS_AUTH_ENABLE=false
+      - JVM_XMS=256m
+      - JVM_XMX=512m
+    ports:
+      - "8848:8848"
+      - "9848:9848"
+      - "9849:9849"
+    volumes:
+      - ./nacos-data:/home/nacos/data
+    depends_on:
+      - zookeeper
+    networks:
+      - default-network
+    profiles:
+      - default
+      - with-nacos
+
+  # server
+  dubbotesthub-server:
+    build:
+      context: .
+      dockerfile: Dockerfile-server
+    container_name: dubbotesthub-server
+    environment:
+      - JAVA_OPTS=-Ddubbo.registry.address=zookeeper://zookeeper:2181
+    ports:
+      - "8080:8080"
+      - "20880:20880"
+    networks:
+      - default-network
+
+networks:
+  default-network:
+    driver: bridge
+
+volumes:
+  zk-data:
+  zk-datalog:
+  nacos-data:
