@@ -32,4 +32,14 @@ public interface HelloFacade {
      * Map parameter call
      */
     Map<String, Object> sayHelloMap(Map<String, Object> paramMap);
+
+    /**
+     * List of objects parameter call
+     */
+    List<HelloResponse> sayHelloListObject(List<HelloRequest> requests);
+
+    /**
+     * Multiple parameters call (three parameters)
+     */
+    HelloResponse sayHello(String name, Integer age, String message);
 }

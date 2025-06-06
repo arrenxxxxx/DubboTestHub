@@ -13,8 +13,8 @@ dubbo:
     port: 20880
   registry:
     # zookeeper or nacos
-    address: zookeeper://zookeeper:2181
-#    address: nacos://nacos:8848
+#    address: zookeeper://zookeeper:2181
+    address: nacos://192.168.3.111:8848
   scan:
     base-packages: io.arrenxxxxx.dubbotesthub.provider
   consumer:
